@@ -351,6 +351,3 @@ MigrationBackup/
 
 #Ignorando o arquivo de variáveis de ambiente.
 .env
-
-#Ignoring mysql volume
-mysql/
