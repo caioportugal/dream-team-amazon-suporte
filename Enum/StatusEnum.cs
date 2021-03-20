@@ -1,4 +1,4 @@
-namespace AmazonSuporte.Enum
+﻿namespace Amazon.Suporte.Enum
 {
     public enum StatusEnum
     {

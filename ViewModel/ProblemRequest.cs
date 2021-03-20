@@ -1,4 +1,5 @@
-namespace AmazonSuporte.ViewModel{
+﻿namespace Amazon.Suporte.ViewModel
+{
     public class ProblemRequest
     {
         public string Title { get; set; }

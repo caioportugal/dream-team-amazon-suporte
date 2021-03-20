@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Amazon.Suporte.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using AmazonSuporte.ViewModel;
 
 namespace AmazonSuporte.Controllers
 {
@@ -10,20 +10,17 @@ namespace AmazonSuporte.Controllers
     [Route("api/[controller]")]
     public class SuportController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        public SuportController() {}
 
         [HttpGet("{id}")]
         public IEnumerable<ProblemResponse> Get(int id)
         {
-            var rng = new Random();
+            var random = new Random();
             return Enumerable.Range(1, 1).Select(index => new ProblemResponse
             {
-               ID = id,
-               Title = "Software Installation",
-               Description = "Software needs to be installed on remote machine"
+                ID = id,
+                Title = "Software Installation",
+                Description = "Software needs to be installed on remote machine"
             })
             .ToArray();
         }

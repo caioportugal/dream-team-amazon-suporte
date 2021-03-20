@@ -1,4 +1,6 @@
+using System;
 using System.Text.Json.Serialization;
+using Amazon.Suporte.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace amazon_suporte
+namespace Amazon.Suporte
 {
     public class Startup
     {
@@ -20,13 +22,17 @@ namespace amazon_suporte
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                    .AddJsonOptions(options => 
-                        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers().AddJsonOptions(options =>
+                   options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddMvc();
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dream Team Amazon Suport", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = Environment.GetEnvironmentVariable(EnvironmentVariable.APITitle),
+                    Version = Environment.GetEnvironmentVariable(EnvironmentVariable.APIVersion)
+                });
             });
         }
 
@@ -39,11 +45,14 @@ namespace amazon_suporte
             }
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseSwagger();
-            app.UseSwaggerUI(c=> {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(Environment.GetEnvironmentVariable(EnvironmentVariable.SwaggerEndpoint),
+                                 Environment.GetEnvironmentVariable(EnvironmentVariable.APIVersion));
+                c.RoutePrefix = string.Empty;
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

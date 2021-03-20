@@ -18,14 +18,13 @@ services:
       networks:
         - suport
     database:
-      container_name: mysql
+      container_name: database
       image: mysql:8.0
       ports:
         - ${DATABASE_PORT}:3306
       env_file: .env
       restart: always
       volumes:
-        - volume-data-config:/etc/mysql
         - volume-data:/var/lib/mysql
       environment:
         MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
@@ -35,5 +34,4 @@ services:
       networks:
         - suport
 volumes:
-   volume-data-config:
    volume-data:

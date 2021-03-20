@@ -4,7 +4,8 @@ ENV DOTNET_RUNNING_IN_CONTAINER=${DOTNET_RUNNING_IN_CONTAINER}
 EXPOSE 5000/tcp
 COPY . /app
 WORKDIR /app
-RUN dotnet tool install --global dotnet-ef --version 3.1
+RUN dotnet tool install --global dotnet-ef
 RUN dotnet restore
 RUN dotnet build
+#RUN dotnet ef database update
 ENTRYPOINT dotnet watch run
