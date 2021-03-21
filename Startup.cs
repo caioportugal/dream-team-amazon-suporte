@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 using Amazon.Suporte.Constants;
+using Amazon.Suporte.Setup.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace Amazon.Suporte
                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddMvc();
             services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -34,6 +36,7 @@ namespace Amazon.Suporte
                     Version = Environment.GetEnvironmentVariable(EnvironmentVariable.APIVersion)
                 });
             });
+            services.RegisterServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
