@@ -352,4 +352,23 @@ MigrationBackup/
 #Ignoring environment variables file
 .env
 
+# Ignore appsettings
+**/appsettings.development.json
+**/appsettings.staging.json
+**/appsettings.production.json
+
+# Ignore ConnectionStrings
+**/connectionstrings.development.json
+**/connectionstrings.staging.json
+**/connectionstrings.production.json
+
+# Ignore MailSettings
+**/mailsettings.development.json
+**/mailsettings.staging.json
+**/mailsettings.production.json
+
+# Ignore to-do
 TODO.txt
+
+docker-compose-local.yml
+dotnet-local.dockerfile

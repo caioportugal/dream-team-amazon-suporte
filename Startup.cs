@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Amazon.Suporte.Database;
 
 namespace Amazon.Suporte
 {
@@ -37,6 +40,9 @@ namespace Amazon.Suporte
                 });
             });
             services.RegisterServices();
+            services.AddDbContext<SupportDBContext>(options =>
+                     options.UseMySql(Environment.GetEnvironmentVariable(EnvironmentVariable.DatabaseConnection)));
+            services.AddScoped<DbContext, SupportDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +66,7 @@ namespace Amazon.Suporte
             {
                 endpoints.MapControllers();
             });
+            PrepDB.ExecuteMigrations(app);
         }
     }
 }
