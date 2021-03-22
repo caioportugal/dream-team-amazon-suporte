@@ -2,6 +2,7 @@
 using Amazon.Suporte.Enum;
 using Amazon.Suporte.Model;
 using System;
+using System.Collections.Generic;
 
 namespace Amazon.Suporte.Services
 {
@@ -33,6 +34,16 @@ namespace Amazon.Suporte.Services
                 problem = unitOfWork.ProblemRepository.Get(id);
             }
             return problem;
+        }
+
+        public IEnumerable<Problem> GetProblemByStatus(StatusEnum status)
+        {
+            var problems = new List<Problem>();
+            using(var unitOfWork = new UnitOfWork(_context))
+            {
+                problems = (List<Problem>)unitOfWork.ProblemRepository.GetProblemByStatus(status);
+            }
+            return problems;
         }
     }
 }

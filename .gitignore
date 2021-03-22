@@ -369,6 +369,3 @@ MigrationBackup/
 
 # Ignore to-do
 TODO.txt
-
-docker-compose-local.yml
-dotnet-local.dockerfile

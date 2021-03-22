@@ -9,9 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Amazon.Suporte.Database;
-
 namespace Amazon.Suporte
 {
     public class Startup
@@ -39,9 +37,8 @@ namespace Amazon.Suporte
                     Version = Environment.GetEnvironmentVariable(EnvironmentVariable.APIVersion)
                 });
             });
-            services.RegisterServices();
             services.AddDbContext<SupportDBContext>(options => options.UseMySql(DefineConnectionString()));
-            services.AddScoped<DbContext, SupportDBContext>();
+            services.RegisterServices();
         }
 
         private string DefineConnectionString()

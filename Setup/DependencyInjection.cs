@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Amazon.Suporte.Services;
 using Amazon.Suporte.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Amazon.Suporte.Setup.Services
 {
@@ -9,6 +10,7 @@ namespace Amazon.Suporte.Setup.Services
 		public static void RegisterServices(this IServiceCollection services)
         {
 			services.AddScoped<IProblemService, ProblemService>();
+			services.AddScoped<DbContext, SupportDBContext>();
 			services.AddScoped<SupportDBContext>();
 		}
 	}
