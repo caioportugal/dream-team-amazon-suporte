@@ -40,8 +40,7 @@ namespace Amazon.Suporte
                 });
             });
             services.RegisterServices();
-            services.AddDbContext<SupportDBContext>(options =>
-                     options.UseMySql(DefineConnectionString()));
+            services.AddDbContext<SupportDBContext>(options => options.UseMySql(DefineConnectionString()));
             services.AddScoped<DbContext, SupportDBContext>();
         }
 
@@ -52,9 +51,11 @@ namespace Amazon.Suporte
             var user = Environment.GetEnvironmentVariable(EnvironmentVariable.DBUser) ?? string.Empty;
             var databaseName = Environment.GetEnvironmentVariable(EnvironmentVariable.DBName) ?? string.Empty;
             var password = Environment.GetEnvironmentVariable(EnvironmentVariable.DBPassword) ?? string.Empty;
-            var connectionstring =  @$"Server={server};Port={port};Database={databaseName};Uid={user};Pwd={password};";
-            Console.WriteLine(connectionstring);
-            return connectionstring;
+            return @$"Server={server};
+                   Port={port};
+                   Database={databaseName};
+                   Uid={user};
+                   Pwd={password};";
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
