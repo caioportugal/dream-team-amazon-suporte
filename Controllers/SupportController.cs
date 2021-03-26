@@ -7,6 +7,7 @@ using Amazon.Suporte.Enum;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace AmazonSuporte.Controllers
 {
@@ -15,11 +16,14 @@ namespace AmazonSuporte.Controllers
     public class SupportController : ControllerBase
     {
         private IProblemService _problemService;
+        private IQueueService _queueService;
         private IMapper _mapper;
         public SupportController(IProblemService problemService,
+                                IQueueService queueService,
                                 IMapper mapper)
         {
             _problemService = problemService;
+            _queueService = queueService;
             _mapper = mapper;
         }
 
@@ -33,13 +37,13 @@ namespace AmazonSuporte.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(ProblemRequest problemRequest)
+        public ActionResult<ProblemResponse> Post(ProblemRequest problemRequest)
         {
-            var problemResponse = _mapper.Map<ProblemResponse>
-                                  (
-                                      _problemService.CreateProblem(_mapper.Map<Problem>(problemRequest))
-                                  );
-            return CreatedAtAction(nameof(Get), new { id = problemResponse.ID }, problemResponse);
+            var problemResponse = _queueService.SendMessage(_mapper.Map<Problem>(problemRequest));
+
+            if (problemResponse.Success)
+                return Ok(problemResponse.Message);
+            return BadRequest(problemResponse.Message);
         }
 
         [HttpGet("status")]
@@ -48,7 +52,7 @@ namespace AmazonSuporte.Controllers
             var problems = _problemService.GetProblemByStatus(status);
             if (!problems.Any())
                 return NotFound();
-            return Ok(problems.Select(x=> _mapper.Map<ProblemResponse>(x)).ToList());
+            return Ok(problems.Select(x => _mapper.Map<ProblemResponse>(x)).ToList());
         }
     }
 }

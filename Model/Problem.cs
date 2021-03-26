@@ -18,5 +18,10 @@ namespace Amazon.Suporte.Model
         public StatusEnum Status { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        public override string ToString()
+        {
+            return base.ToString() + ": " + ID.ToString();
+        }
     }
 }
