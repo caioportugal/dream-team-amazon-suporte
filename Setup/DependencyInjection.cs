@@ -13,6 +13,7 @@ namespace Amazon.Suporte.Setup.Services
 			services.AddScoped<IQueueService, QueueService>();
 			services.AddScoped<DbContext, SupportDBContext>();
 			services.AddScoped<SupportDBContext>();
+			services.AddHostedService<ConsumerService>();
 		}
 	}
 }

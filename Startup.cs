@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Amazon.Suporte.Database;
+using Amazon.Suporte.Services;
+
 namespace Amazon.Suporte
 {
     public class Startup
