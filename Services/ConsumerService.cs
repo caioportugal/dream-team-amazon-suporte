@@ -12,7 +12,6 @@ namespace Amazon.Suporte.Services
         public ConsumerService(IProblemService problemService)
         {
             _problemService = problemService;
-
         }
 
         private async Task StartConsumer(CancellationToken stoppingToken)

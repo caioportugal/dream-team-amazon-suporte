@@ -16,14 +16,14 @@ namespace AmazonSuporte.Controllers
     public class SupportController : ControllerBase
     {
         private IProblemService _problemService;
-        private IQueueService _queueService;
+        private IProducerService _producerService;
         private IMapper _mapper;
         public SupportController(IProblemService problemService,
-                                IQueueService queueService,
+                                IProducerService producerService,
                                 IMapper mapper)
         {
             _problemService = problemService;
-            _queueService = queueService;
+            _producerService = producerService;
             _mapper = mapper;
         }
 
@@ -39,8 +39,7 @@ namespace AmazonSuporte.Controllers
         [HttpPost]
         public ActionResult<ProblemResponse> Post(ProblemRequest problemRequest)
         {
-            var problemResponse = _queueService.SendMessage(_mapper.Map<Problem>(problemRequest));
-
+            var problemResponse = _producerService.SendMessage(_mapper.Map<Problem>(problemRequest));
             if (problemResponse.Success)
                 return Ok(problemResponse.Message);
             return BadRequest(problemResponse.Message);
