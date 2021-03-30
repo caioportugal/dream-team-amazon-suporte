@@ -5,7 +5,7 @@ networks:
 services:
     app:
       user: root
-      container_name: app
+      container_name: appsupport
       env_file: .env
       build: 
         context: .
@@ -17,7 +17,7 @@ services:
       networks:
         - support
     database:
-      container_name: database
+      container_name: databasesupport
       image: mysql:8.0
       ports:
         - ${DATABASE_PORT}:3306
@@ -32,6 +32,7 @@ services:
         - support
     zookeeper:
       image: confluentinc/cp-zookeeper:latest
+      container_name: zookeepersupport
       networks: 
         - support
       ports:
@@ -41,6 +42,7 @@ services:
         ZOOKEEPER_TICK_TIME: 2000  
     kafka:
       image: confluentinc/cp-kafka:latest
+      container_name: kafkasupport
       networks: 
         - support
       depends_on:
