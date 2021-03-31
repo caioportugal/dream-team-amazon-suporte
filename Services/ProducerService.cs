@@ -1,38 +1,46 @@
-﻿using Amazon.Suporte.Model;
+﻿using Amazon.Suporte.Constants;
+using Amazon.Suporte.Model;
 using Confluent.Kafka;
+using Newtonsoft.Json;
 using System;
 
 namespace Amazon.Suporte.Services
 {
     public class ProducerService : IProducerService
     {
-        private IProblemService _problemService;
-        private readonly string kafkaAddress = "kafka:29092";
-        private readonly string topicKafka = "test-topic";
         private readonly ProducerConfig kafkaConfig;
-
-        public ProducerService(IProblemService problemService)
+        public ProducerService()
         {
-            _problemService = problemService;
-            kafkaConfig = new ProducerConfig { BootstrapServers = kafkaAddress };
+            kafkaConfig = new ProducerConfig 
+            {
+                BootstrapServers = Environment
+                                  .GetEnvironmentVariable(EnvironmentVariable.KafkaAddress)
+                                   ?? "kafka:29092"
+            };        
         }
+
         public QueueViewModel SendMessage(Problem problem)
         {
             var queueViewModel = new QueueViewModel();
             queueViewModel.Success = false;
-
-
             using var producer = new ProducerBuilder<Null, string>(kafkaConfig).Build();
             {
                 try
                 {
-                    string problemaObj = Newtonsoft.Json.JsonConvert.SerializeObject(problem);
-                    var sendResult = producer.ProduceAsync(topicKafka, new Message<Null, string>
-                    { Value = problemaObj }).GetAwaiter().GetResult();
-
+                    problem.CreateIdentificator();
+                    string problemSerialized = JsonConvert.SerializeObject(problem);                    
+                    var sendResult = producer.ProduceAsync(
+                        Environment
+                        .GetEnvironmentVariable(EnvironmentVariable.KafkaTopic)
+                        ?? "test-topic",
+                        new Message<Null, string>
+                        {
+                            Value = problemSerialized
+                        })
+                        .GetAwaiter()
+                        .GetResult();
                     queueViewModel.Success = true;
-                    queueViewModel.Message = "Problem successfully added to the queue";
-
+                    queueViewModel.Message = $@"Your problem will be added soon, please consult by this number {problem.ProblemIdentificator}";
                 }
                 catch (ProduceException<Null, Problem> e)
                 {

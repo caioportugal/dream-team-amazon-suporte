@@ -1,11 +1,9 @@
-﻿using Amazon.Suporte.Enum;
-using Amazon.Suporte.Model;
-using System.Collections.Generic;
+﻿using Amazon.Suporte.Model;
 
 namespace Amazon.Suporte.Database
 {
     public interface IProblemRepository : IRepository<Problem>
     {
-        IEnumerable<Problem> GetProblemByStatus(StatusEnum status);
+        Problem GetProblemByIdentificator(string identificator);
     }
 }

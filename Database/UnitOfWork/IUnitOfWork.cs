@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Amazon.Suporte.Database
+﻿namespace Amazon.Suporte.Database
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         IProblemRepository ProblemRepository { get; }
         int Complete();

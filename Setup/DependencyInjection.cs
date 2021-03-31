@@ -12,7 +12,11 @@ namespace Amazon.Suporte.Setup.Services
 			services.AddScoped<IProblemService, ProblemService>();
 			services.AddScoped<IProducerService, ProducerService>();
 			services.AddScoped<DbContext, SupportDBContext>();
-			services.AddScoped<SupportDBContext>();
+			services.AddScoped<SupportDBContext>();			
+		}
+
+		public static void RegisterHostedService(this IServiceCollection services)
+        {
 			services.AddHostedService<ConsumerService>();
 		}
 	}

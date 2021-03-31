@@ -10,5 +10,6 @@ namespace Amazon.Suporte.ViewModel
         public string Description { get; set; }
         public StatusEnum Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string ProblemIdentificator { get; set; }
     }
 }

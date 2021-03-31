@@ -1,6 +1,4 @@
-﻿using Amazon.Suporte.Enum;
-using Amazon.Suporte.Model;
-using System.Collections.Generic;
+﻿using Amazon.Suporte.Model;
 using System.Linq;
 
 namespace Amazon.Suporte.Database
@@ -13,9 +11,10 @@ namespace Amazon.Suporte.Database
             get { return Context as SupportDBContext; }
         }
 
-        public IEnumerable<Problem> GetProblemByStatus(StatusEnum status)
+        public Problem GetProblemByIdentificator(string identificator)
         {
-            return SupportDBContext.Problem.Where(x => x.Status == status).ToList();
+            return SupportDBContext.Problem
+                   .FirstOrDefault(x => x.ProblemIdentificator == identificator);
         }
     }
 }

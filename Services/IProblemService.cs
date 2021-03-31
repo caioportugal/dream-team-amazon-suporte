@@ -1,13 +1,10 @@
-﻿using Amazon.Suporte.Enum;
-using Amazon.Suporte.Model;
-using System.Collections.Generic;
+﻿using Amazon.Suporte.Model;
 
 namespace Amazon.Suporte.Services
 {
     public interface IProblemService
     {
         Problem CreateProblem(Problem problem);
-        Problem GetProblem(int id);
-        IEnumerable<Problem> GetProblemByStatus(StatusEnum status);
+        Problem GetProblemByIdentificator(string identificator);
     }
 }

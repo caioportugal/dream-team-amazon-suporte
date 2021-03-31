@@ -11,5 +11,8 @@
         public const string APITitle = "API_TITLE";
         public const string APIVersion = "API_VERSION";
         public const string SwaggerEndpoint = "SWAGGER_ENDPOINT";
+
+        public const string KafkaTopic = "KAFKA_TOPIC";
+        public const string KafkaAddress = "KAFKA_ADDRESS";
     }
 }

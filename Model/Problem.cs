@@ -18,5 +18,8 @@ namespace Amazon.Suporte.Model
         public StatusEnum Status { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
+        [Required]
+        public string ProblemIdentificator { get; set; }
+        public void CreateIdentificator() => ProblemIdentificator = Guid.NewGuid().ToString("N");
     }
 }

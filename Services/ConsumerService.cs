@@ -1,44 +1,73 @@
-﻿using Amazon.Suporte.Model;
+﻿using Amazon.Suporte.Constants;
+using Amazon.Suporte.Model;
 using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Amazon.Suporte.Services
 {
-    public class ConsumerService : BackgroundService
+    public class ConsumerService : IHostedService, IDisposable
     {
         private IProblemService _problemService;
+        private Timer _timer;
+
         public ConsumerService(IProblemService problemService)
         {
             _problemService = problemService;
         }
 
-        private async Task StartConsumer(CancellationToken stoppingToken)
+        private void StartConsumer(object state)
         {
-            string kafkaAddress = "kafka:29092";
-            string topicKafka = "test-topic";
-            var kafkaConfig = new ConsumerConfig { GroupId = "test-consumer-group", BootstrapServers = kafkaAddress };
-
-            while (!stoppingToken.IsCancellationRequested)
+            var kafkaConfig = new ConsumerConfig
             {
-                using (var consumer = new ConsumerBuilder<Null, string>(kafkaConfig).Build())
+                GroupId = "test-consumer-group",
+                BootstrapServers = Environment
+                                  .GetEnvironmentVariable(EnvironmentVariable.KafkaAddress) 
+                                  ?? "kafka:29092"
+            };
+            using (var consumer = new ConsumerBuilder<Null, string>(kafkaConfig).Build())
+            {
+                try
                 {
-                    consumer.Subscribe(topicKafka);
-                    var consumeResult = consumer.Consume().Value;
-                    if (consumeResult != null)
+                    consumer.Subscribe(Environment
+                                      .GetEnvironmentVariable(EnvironmentVariable.KafkaTopic) 
+                                      ?? "test-topic");
+                    var problemResult = consumer.Consume().Value;
+                    if (problemResult != null)
                     {
-                        var problem = Newtonsoft.Json.JsonConvert.DeserializeObject<Problem>(consumeResult);
+                        var problem = JsonConvert.DeserializeObject<Problem>(problemResult);
                         _problemService.CreateProblem(problem);
                     }
                 }
+                catch (Exception e)
+                {
+                    //TODO: We had some problems with the library and we couldn't create a topic automatically.
+                    Console.WriteLine($"Exception {e.Message}");
+                }                
             }
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            Task.Run(() => StartConsumer(stoppingToken));
+            _timer = new Timer(StartConsumer,
+                              null,
+                              TimeSpan.Zero,
+                              TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

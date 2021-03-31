@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Amazon.Suporte.Setup.Services;
 
 namespace Amazon.Suporte
 {
@@ -15,6 +16,10 @@ namespace Amazon.Suporte
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).
+                ConfigureServices(services =>
+                {
+                    services.RegisterHostedService();
                 });
     }
 }

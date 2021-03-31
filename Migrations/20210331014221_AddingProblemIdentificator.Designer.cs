@@ -3,14 +3,16 @@ using System;
 using Amazon.Suporte.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AmazonSuporte.Migrations
 {
     [DbContext(typeof(SupportDBContext))]
-    partial class SupportDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210331014221_AddingProblemIdentificator")]
+    partial class AddingProblemIdentificator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

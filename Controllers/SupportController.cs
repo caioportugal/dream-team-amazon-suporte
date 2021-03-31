@@ -6,8 +6,6 @@ using AutoMapper;
 using Amazon.Suporte.Enum;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Threading.Tasks;
 
 namespace AmazonSuporte.Controllers
 {
@@ -27,15 +25,6 @@ namespace AmazonSuporte.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<ProblemResponse> Get(int id)
-        {
-            var problem = _problemService.GetProblem(id);
-            if (problem == null)
-                return NotFound();
-            return Ok(_mapper.Map<ProblemResponse>(problem));
-        }
-
         [HttpPost]
         public ActionResult<ProblemResponse> Post(ProblemRequest problemRequest)
         {
@@ -45,13 +34,13 @@ namespace AmazonSuporte.Controllers
             return BadRequest(problemResponse.Message);
         }
 
-        [HttpGet("status")]
-        public ActionResult<IEnumerable<ProblemResponse>> GetProblemStatus(StatusEnum status)
+        [HttpGet("{identificator}")]
+        public ActionResult<ProblemResponse> GetProblemIdentificator(string identificator)
         {
-            var problems = _problemService.GetProblemByStatus(status);
-            if (!problems.Any())
+            var problem = _problemService.GetProblemByIdentificator(identificator);
+            if (problem == null)
                 return NotFound();
-            return Ok(problems.Select(x => _mapper.Map<ProblemResponse>(x)).ToList());
+            return Ok(_mapper.Map<ProblemResponse>(problem));
         }
     }
 }
