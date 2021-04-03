@@ -16,6 +16,11 @@ services:
         - database
       networks:
         - support
+      environment:
+        - WAIT_HOSTS=mysql:3306
+        - WAIT_HOSTS_TIMEOUT=300
+        - WAIT_SLEEP_INTERVAL=30
+        - WAIT_HOST_CONNECT_TIMEOUT=30
     database:
       container_name: databasesupport
       image: mysql:8.0
