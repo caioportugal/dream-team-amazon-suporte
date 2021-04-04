@@ -16,7 +16,7 @@ services:
         - database
       networks:
         - support
-      command: ["/bin/bash","wait-for-it.sh", "database:3306", "-t", "300", "--" ,"dotnet", "Amazon-Suporte.dll"]
+      command: ["/bin/bash","./wait-for-it.sh", "database:3306", "-t", "300", "--" ,"dotnet", "Amazon-Suporte.dll"]
     database:
       container_name: databasesupport
       image: mysql:8.0
