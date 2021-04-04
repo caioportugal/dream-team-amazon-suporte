@@ -7,9 +7,7 @@ services:
       user: root
       container_name: appsupport
       env_file: .env
-      build: 
-        context: .
-        dockerfile: dotnet.dockerfile
+      image: lmmiranda0/suporte-api
       ports: 
         - ${APP_PORT}:80
       depends_on:
